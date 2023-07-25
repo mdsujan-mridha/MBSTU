@@ -1,0 +1,99 @@
+#include <stdio.h>
+
+// Function to merge two sorted subarrays
+void Merge(int arr[], int left, int middle, int right) {
+    int n1 = middle - left + 1;
+    int n2 = right - middle;
+
+    // Create temporary arrays to store the two subarrays
+    int leftArr[n1], rightArr[n2];
+
+    // Copy data to the temporary arrays
+    for (int i = 0; i < n1; i++) {
+        leftArr[i] = arr[left + i];
+    }
+    for (int j = 0; j < n2; j++) {
+        rightArr[j] = arr[middle + 1 + j];
+    }
+
+    // Merge the two temporary arrays back into the original array
+    int i = 0; // Index of the first subarray
+    int j = 0; // Index of the second subarray
+    int k = left; // Index of the merged array
+
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i++;
+        }
+        else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy any remaining elements of the leftArr
+    while (i < n1) {
+        arr[k] = leftArr[i];
+        i++;
+        k++;
+    }
+
+    // Copy any remaining elements of the rightArr
+    while (j < n2) {
+        arr[k] = rightArr[j];
+        j++;
+        k++;
+    }
+}
+
+// Function to perform InsertionSort
+void InsertionSort(int arr[], int left, int right) {
+    for (int i = left + 1; i <= right; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        // Move elements of arr[0..i-1] that are greater than key, to one position ahead of their current position
+        while (j >= left && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// Function to perform MergeSort Plus (Optimized MergeSort)
+void MergeSortPlus(int arr[], int left, int right, int threshold) {
+    if (right - left + 1 > threshold) {
+        // Use MergeSort for large subarrays
+        int middle = (left + right) / 2;
+
+        // Sort the first and second halves recursively
+        MergeSortPlus(arr, left, middle, threshold);
+        MergeSortPlus(arr, middle + 1, right, threshold);
+
+        // Merge the sorted halves
+        Merge(arr, left, middle, right);
+    }
+    else {
+        // Use InsertionSort for small subarrays
+        InsertionSort(arr, left, right);
+    }
+}
+
+int main() {
+    int arr[] = {64, 34, 25, 12, 22, 11, 90, 8};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int threshold = 5; // The threshold to decide when to use InsertionSort
+
+    MergeSortPlus(arr, 0, n - 1, threshold);
+
+    printf("Sorted array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    return 0;
+}

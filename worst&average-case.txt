@@ -1,0 +1,23 @@
+To analyze the worst-case and average-case asymptotic running times of the given "slowBinSearch" algorithm, we need to consider the number of self-calls made during its execution.
+
+In the algorithm, there is a random condition (determined by "getRandomInteger() % 2") that decides whether to proceed with a binary search on the left or right half of the array or perform a wasted self-call. The wasted self-call is the recursive call that doesn't lead to a meaningful computation, i.e., it doesn't contribute to finding the target element.
+
+Let's define the number of wasted self-calls made during the execution of "slowBinSearch" as W(n), where n is the size of the array segment being searched.
+
+To analyze the worst-case asymptotic running time, we consider the scenario where all self-calls are wasted self-calls. In the worst-case, each recursive call performs only one comparison and results in another wasted self-call. So, the total number of wasted self-calls can be represented as follows:
+
+Worst-case wasted self-calls: W(n) = W(n/2) + 1
+
+Using the Master Theorem (a common technique for solving recursive relations), we find that the worst-case time complexity of "slowBinSearch" is O(log n).
+
+Now, let's analyze the average-case asymptotic running time. In the average-case, the randomness of the condition can cause some self-calls to lead to a meaningful computation while others are wasted. Let's define the probability of a wasted self-call as p.
+
+The average-case wasted self-calls can be represented as follows:
+
+Average-case wasted self-calls: W(n) = p * W(n/2) + (1-p)
+
+The probability of a wasted self-call (p) can be computed by counting how many times the random condition evaluates to true (leading to a wasted self-call) and how many times it evaluates to false (leading to a meaningful computation). Since getRandomInteger() % 2 can be either 0 or 1, the probability p is 0.5 (50%).
+
+Using the Master Theorem, we find that the average-case time complexity of "slowBinSearch" is O(log n).
+
+In conclusion, the worst-case and average-case asymptotic running times of the "slowBinSearch" algorithm are both O(log n).
